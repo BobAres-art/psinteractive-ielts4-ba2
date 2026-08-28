@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Festival Wishes & Plans | Interactive Grammar</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #eef2ff;
+      --festival-pink: #ec4899;
+      --festival-pink-light: #fdf2f8;
+      --amber: #f59e0b;
+      --amber-light: #fffbeb;
+      --teal: #0d9488;
+      --teal-light: #f0fdfa;
+      
+      --bg-body: #f8fafc;
+      --surface-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --error: #ef4444;
+      --error-light: #fef2f2;
+      
+      --border: #e2e8f0;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 2rem;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      background: linear-gradient(145deg, #1e1b4b 0%, #311042 60%, #0f172a 100%);
+      color: #ffffff;
+      padding: 2.25rem 1.25rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      color: #fbcfe8;
+    }
+
+    .header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-subtitle {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    /* Sticky Mobile Navigation */
+    .nav-container {
+      max-width: 600px;
+      margin: -1.75rem auto 1.25rem;
+      padding: 0 1rem;
+      position: sticky;
+      top: 0.75rem;
+      z-index: 100;
+    }
+
+    .tab-bar {
+      display: flex;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      padding: 0.35rem;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      gap: 0.25rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      background: transparent;
+      border: none;
+      padding: 0.55rem 0.4rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      min-height: 48px; /* Mobile tap target standard */
+    }
+
+    .tab-btn i {
+      font-size: 0.95rem;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.05);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title i {
+      color: var(--primary);
+    }
+
+    /* Dialogue */
+    .chat-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin: 1rem 0;
+    }
+
+    .chat-bubble {
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .bubble-mateo {
+      background: #f1f5f9;
+      border-bottom-left-radius: 4px;
+      margin-right: 1.5rem;
+    }
+
+    .bubble-lin {
+      background: #fdf2f8;
+      border: 1px solid #fce7f3;
+      border-bottom-right-radius: 4px;
+      margin-left: 1.5rem;
+    }
+
+    .speaker-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+
+    .bubble-mateo .speaker-name { color: var(--primary); }
+    .bubble-lin .speaker-name { color: var(--festival-pink); }
+
+    /* Highlighting */
+    .highlight-first, .highlight-second {
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .show-conditionals .highlight-first {
+      background-color: #dbeafe;
+      color: #1e40af;
+      font-weight: 600;
+      padding: 1px 4px;
+    }
+
+    .show-conditionals .highlight-second {
+      background-color: #fef3c7;
+      color: #92400e;
+      font-weight: 600;
+      padding: 1px 4px;
+    }
+
+    .legend-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.85rem;
+      background: #f8fafc;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .show-conditionals ~ .legend-box,
+    .legend-box.visible {
+      display: flex;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Simple Rule Cards */
+    .rule-box {
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .rule-box-1 {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .rule-box-2 {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    .rule-head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .rule-box-1 .rule-head { color: #166534; }
+    .rule-box-2 .rule-head { color: #92400e; }
+
+    .formula-tag {
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.5rem 0;
+      display: block;
+      color: var(--text-main);
+    }
+
+    .simple-example {
+      font-size: 0.9rem;
+      color: #334155;
+      background: rgba(255,255,255,0.6);
+      padding: 0.5rem 0.65rem;
+      border-radius: 6px;
+      border-left: 3px solid #6366f1;
+    }
+
+    /* Practice Exercises */
+    .exercise-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .ex-step {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+
+    .ex-prompt {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: var(--text-main);
+    }
+
+    .target-sentence {
+      background: #f8fafc;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      border-left: 3px solid var(--primary);
+    }
+
+    /* Touch-friendly MCQ */
+    .choice-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .choice-btn {
+      width: 100%;
+      min-height: 46px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-main);
+    }
+
+    .choice-btn.correct {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: #065f46;
+    }
+
+    .choice-btn.wrong {
+      background: var(--error-light);
+      border-color: var(--error);
+      color: #991b1b;
+    }
+
+    /* Mobile Selects */
+    select.mobile-select {
+      width: 100%;
+      min-height: 44px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0.35rem 0;
+      outline: none;
+    }
+
+    /* Touch Word Bank */
+    .word-area {
+      min-height: 46px;
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: var(--radius-sm);
+      padding: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .word-area.target {
+      background: #ffffff;
+      border-style: solid;
+      border-color: #c7d2fe;
+    }
+
+    .touch-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 0.4rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    /* Feedback */
+    .feedback {
+      display: none;
+      margin-top: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .feedback.success {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--success-light);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .feedback.danger {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--error-light);
+      color: #991b1b;
+      border: 1px solid #fecdd3;
+    }
+
+    /* Buttons */
+    .action-btn {
+      width: 100%;
+      min-height: 44px;
+      background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    .action-btn.secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      width: auto;
+      padding: 0.2rem 0.6rem;
+      min-height: 32px;
+      font-size: 0.75rem;
+    }
+
+    /* Simulator */
+    .sim-card {
+      background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+
+    .sim-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .sim-result {
+      margin-top: 0.65rem;
+      padding: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid var(--festival-pink);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      min-height: 2.75rem;
+      display: flex;
+      align-items: center;
+      color: #f1f5f9;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="mobile-header">
+    <div class="badge"><i class="fa-solid fa-masks-theater"></i> B1 Grammar Lab</div>
+    <h1 class="header-title">Festival Visions</h1>
+    <p class="header-subtitle">Real Plans & Dream Scenarios</p>
+  </header>
+
+  <div class="nav-container">
+    <nav class="tab-bar">
+      <button class="tab-btn active" onclick="openTab('tab-exposure', event)">
+        <i class="fa-solid fa-comments"></i>
+        <span>Exposure</span>
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-rules', event)">
+        <i class="fa-solid fa-book-open"></i>
+        <span>Rules</span>
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-practice', event)">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Practice</span>
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-simulator', event)">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Simulator</span>
+      </button>
+    </nav>
+  </div>
+
+  <main>
+    <section id="tab-exposure" class="tab-content active">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-ticket"></i> Festival Chat
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          Read how Mateo and Lin talk about festival plans and wishes.
+        </p>
+
+        <div id="dialogueBox" class="chat-wrapper">
+          <div class="chat-bubble bubble-mateo">
+            <span class="speaker-name">Mateo</span>
+            Have you decided which festival to visit this year?
+          </div>
+
+          <div class="chat-bubble bubble-lin">
+            <span class="speaker-name">Lin</span>
+            Not yet! <span class="highlight-first">If I save enough money, I will travel to Spain for La Tomatina.</span> But tickets are costly.
+          </div>
+
+          <div class="chat-bubble bubble-mateo">
+            <span class="speaker-name">Mateo</span>
+            That sounds fun! <span class="highlight-second">If I had more vacation days, I would come with you,</span> but my boss said no.
+          </div>
+
+          <div class="chat-bubble bubble-lin">
+            <span class="speaker-name">Lin</span>
+            What about the Lantern Festival instead?
+          </div>
+
+          <div class="chat-bubble bubble-mateo">
+            <span class="speaker-name">Mateo</span>
+            Great idea. <span class="highlight-first">If we book flights today, we will get a big discount.</span>
+          </div>
+
+          <div class="chat-bubble bubble-lin">
+            <span class="speaker-name">Lin</span>
+            <span class="highlight-second">If I won the lottery, I would visit every festival in the world!</span> Let's check flights now.
+          </div>
+        </div>
+
+        <button class="action-btn" onclick="toggleAnalysis()" style="margin-top: 0.5rem;">
+          <i class="fa-solid fa-highlighter"></i> Toggle Highlights
+        </button>
+
+        <div id="exposureLegend" class="legend-box">
+          <div class="legend-item">
+            <span class="dot" style="background: #3b82f6;"></span>
+            <span>Blue = Real Plan (1st Conditional)</span>
+          </div>
+          <div class="legend-item">
+            <span class="dot" style="background: #f59e0b;"></span>
+            <span>Orange = Dream / Wish (2nd Conditional)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-rules" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-lightbulb"></i> Easy Rule Guide
+        </div>
+
+        <div class="rule-box rule-box-1">
+          <div class="rule-head">
+            <i class="fa-solid fa-check"></i> 1st Conditional: Real Possibility
+          </div>
+          <p style="font-size: 0.85rem; color: #166534;">Use for realistic plans and future outcomes.</p>
+          <div class="formula-tag">If + Present Simple, ... will + Verb</div>
+          <div class="simple-example">
+            "<strong>If it rains</strong>, I <strong>will take</strong> an umbrella."
+          </div>
+        </div>
+
+        <div class="rule-box rule-box-2">
+          <div class="rule-head">
+            <i class="fa-solid fa-star"></i> 2nd Conditional: Imaginary Wish
+          </div>
+          <p style="font-size: 0.85rem; color: #92400e;">Use for dreams or unreal present/future situations.</p>
+          <div class="formula-tag">If + Past Simple, ... would + Verb</div>
+          <div class="simple-example">
+            "<strong>If I had</strong> more time, I <strong>would travel</strong> more."
+          </div>
+        </div>
+
+        <div style="background: #f1f5f9; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; border-left: 3px solid var(--primary);">
+          <strong>Comma Rule:</strong> Use a comma only when starting with <em>If</em>.<br>
+          &bull; <em>"If it rains, we will stay home."</em><br>
+          &bull; <em>"We will stay home if it rains."</em>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-practice" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-vial"></i> Quick Practice
+        </div>
+
+        <div class="exercise-card">
+          <span class="ex-step">Challenge 1</span>
+          <div class="ex-prompt">Is this real or imaginary?</div>
+          <div class="target-sentence">"If I had wings, I would fly to the Rio Carnival."</div>
+          <div class="choice-group" id="ex1-opts">
+            <button class="choice-btn" onclick="checkEx1(this, false)">Real / Likely (1st)</button>
+            <button class="choice-btn" onclick="checkEx1(this, true)">Imaginary / Dream (2nd)</button>
+          </div>
+          <div id="ex1-fb" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+          <span class="ex-step">Challenge 2</span>
+          <div class="ex-prompt">Identify the structure:</div>
+          <div class="target-sentence">"If we buy passes today, we will save money."</div>
+          <div class="choice-group" id="ex2-opts">
+            <button class="choice-btn" onclick="checkEx2(this, true)">First Conditional</button>
+            <button class="choice-btn" onclick="checkEx2(this, false)">Second Conditional</button>
+          </div>
+          <div id="ex2-fb" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+          <span class="ex-step">Challenge 3</span>
+          <div class="ex-prompt">Complete the real future plan:</div>
+          <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+            If the band
+            <select class="mobile-select" id="ex3-q1">
+              <option value="">-- select verb --</option>
+              <option value="starts">starts (present)</option>
+              <option value="started">started (past)</option>
+            </select>
+            on time, we
+            <select class="mobile-select" id="ex3-q2">
+              <option value="">-- select modal --</option>
+              <option value="will hear">will hear</option>
+              <option value="would hear">would hear</option>
+            </select>
+            the song.
+          </div>
+          <button class="action-btn" onclick="checkEx3()">Check</button>
+          <div id="ex3-fb" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+          <span class="ex-step">Challenge 4</span>
+          <div class="ex-prompt">Complete the imaginary dream:</div>
+          <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+            If I
+            <select class="mobile-select" id="ex4-q1">
+              <option value="">-- select verb --</option>
+              <option value="spoke">spoke (past)</option>
+              <option value="speak">speak (present)</option>
+            </select>
+            Japanese, I
+            <select class="mobile-select" id="ex4-q2">
+              <option value="">-- select modal --</option>
+              <option value="would guide">would guide</option>
+              <option value="will guide">will guide</option>
+            </select>
+            tourists at the Gion Festival.
+          </div>
+          <button class="action-btn" onclick="checkEx4()">Check</button>
+          <div id="ex4-fb" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <span class="ex-step">Challenge 5 &bull; Tap Words</span>
+            <button class="action-btn secondary" onclick="resetScramble(5)">Reset</button>
+          </div>
+          <div class="ex-prompt">Build: Real early plan</div>
+          <div class="word-area target" id="target-5"></div>
+          <div class="word-area" id="pool-5"></div>
+          <button class="action-btn" onclick="checkScramble(5)">Check Order</button>
+          <div id="ex5-fb" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <span class="ex-step">Challenge 6 &bull; Tap Words</span>
+            <button class="action-btn secondary" onclick="resetScramble(6)">Reset</button>
+          </div>
+          <div class="ex-prompt">Build: Venice mask dream</div>
+          <div class="word-area target" id="target-6"></div>
+          <div class="word-area" id="pool-6"></div>
+          <button class="action-btn" onclick="checkScramble(6)">Check Order</button>
+          <div id="ex6-fb" class="feedback"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-simulator" class="tab-content">
+      <div class="card sim-card">
+        <div class="card-title" style="color: #ffffff;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--festival-pink);"></i> Event Simulator
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1;">Test different decisions to see the conditional outcomes.</p>
+
+        <div class="sim-box">
+          <span style="font-size: 0.8rem; font-weight: 700; color: #93c5fd; text-transform: uppercase;">1. Realistic Decision</span>
+          <select class="mobile-select" id="sim-1" onchange="simulate()" style="margin-top: 0.4rem;">
+            <option value="">-- Choose Weather --</option>
+            <option value="rain">If it rains during the concert...</option>
+            <option value="clear">If the sky stays completely clear...</option>
+          </select>
+          <div class="sim-result" id="res-1">Select an option above...</div>
+        </div>
+
+        <div class="sim-box">
+          <span style="font-size: 0.8rem; font-weight: 700; color: #fde68a; text-transform: uppercase;">2. Imaginary Scenario</span>
+          <select class="mobile-select" id="sim-2" onchange="simulate()" style="margin-top: 0.4rem;">
+            <option value="">-- Choose Dream --</option>
+            <option value="rich">If I had a million dollars...</option>
+            <option value="singer">If I were a famous rock singer...</option>
+          </select>
+          <div class="sim-result" id="res-2" style="border-left-color: var(--amber);">Select an option above...</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Designed by Babak Alaee
+  </footer>
+
+  <script>
+    // Tab Switching
+    function openTab(tabId, event) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Highlighting
+    let isHighlighted = false;
+    function toggleAnalysis() {
+      const box = document.getElementById('dialogueBox');
+      const legend = document.getElementById('exposureLegend');
+      isHighlighted = !isHighlighted;
+      if (isHighlighted) {
+        box.classList.add('show-conditionals');
+        legend.classList.add('visible');
+      } else {
+        box.classList.remove('show-conditionals');
+        legend.classList.remove('visible');
+      }
+    }
+
+    // Exercise 1
+    function checkEx1(btn, isCorrect) {
+      const parent = document.getElementById('ex1-opts');
+      const fb = document.getElementById('ex1-fb');
+      parent.querySelectorAll('.choice-btn').forEach(b => b.className = 'choice-btn');
+      
+      if (isCorrect) {
+        btn.classList.add('correct');
+        fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Correct! Having wings is imaginary (2nd Conditional).';
+        fb.className = 'feedback success';
+      } else {
+        btn.classList.add('wrong');
+        fb.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Not quite. Humans cannot grow wings, so it is imaginary.';
+        fb.className = 'feedback danger';
+      }
+    }
+
+    // Exercise 2
+    function checkEx2(btn, isCorrect) {
+      const parent = document.getElementById('ex2-opts');
+      const fb = document.getElementById('ex2-fb');
+      parent.querySelectorAll('.choice-btn').forEach(b => b.className = 'choice-btn');
+      
+      if (isCorrect) {
+        btn.classList.add('correct');
+        fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Great! "Buy" (present) + "will save" = 1st Conditional.';
+        fb.className = 'feedback success';
+      } else {
+        btn.classList.add('wrong');
+        fb.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Look at "will save". That indicates the 1st conditional.';
+        fb.className = 'feedback danger';
+      }
+    }
+
+    // Exercise 3
+    function checkEx3() {
+      const q1 = document.getElementById('ex3-q1').value;
+      const q2 = document.getElementById('ex3-q2').value;
+      const fb = document.getElementById('ex3-fb');
+
+      if (q1 === 'starts' && q2 === 'will hear') {
+        fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Correct! (starts + will hear)';
+        fb.className = 'feedback success';
+      } else {
+        fb.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Use Present Simple + will for real plans.';
+        fb.className = 'feedback danger';
+      }
+    }
+
+    // Exercise 4
+    function checkEx4() {
+      const q1 = document.getElementById('ex4-q1').value;
+      const q2 = document.getElementById('ex4-q2').value;
+      const fb = document.getElementById('ex4-fb');
+
+      if (q1 === 'spoke' && q2 === 'would guide') {
+        fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Correct! (spoke + would guide)';
+        fb.className = 'feedback success';
+      } else {
+        fb.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Use Past Simple + would for dreams.';
+        fb.className = 'feedback danger';
+      }
+    }
+
+    // Touch Scramble Engine
+    const scrambles = {
+      5: {
+        target: ["If", "we", "arrive", "early,", "we", "will", "find", "seats."],
+        tokens: ["seats.", "we", "If", "arrive", "will", "find", "early,", "we"]
+      },
+      6: {
+        target: ["If", "I", "lived", "in", "Venice,", "I", "would", "buy", "a", "mask."],
+        tokens: ["a", "buy", "in", "lived", "mask.", "If", "would", "Venice,", "I", "I"]
+      }
+    };
+
+    function initScramble(id) {
+      const data = scrambles[id];
+      const pool = document.getElementById(`pool-${id}`);
+      const target = document.getElementById(`target-${id}`);
+      pool.innerHTML = '';
+      target.innerHTML = '';
+
+      data.tokens.forEach(word => {
+        const chip = document.createElement('span');
+        chip.className = 'touch-chip';
+        chip.textContent = word;
+        chip.onclick = () => {
+          if (chip.parentElement === pool) {
+            target.appendChild(chip);
+          } else {
+            pool.appendChild(chip);
+          }
+        };
+        pool.appendChild(chip);
+      });
+    }
+
+    function resetScramble(id) {
+      initScramble(id);
+      const fb = document.getElementById(`ex${id}-fb`);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+    }
+
+    function checkScramble(id) {
+      const target = document.getElementById(`target-${id}`);
+      const text = Array.from(target.children).map(c => c.textContent).join(' ');
+      const expected = scrambles[id].target.join(' ');
+      const fb = document.getElementById(`ex${id}-fb`);
+
+      if (text === expected) {
+        fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> Perfect sentence order!';
+        fb.className = 'feedback success';
+      } else {
+        fb.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Order is not quite right. Tap reset to try again.';
+        fb.className = 'feedback danger';
+      }
+    }
+
+    // Simulator
+    function simulate() {
+      const s1 = document.getElementById('sim-1').value;
+      const s2 = document.getElementById('sim-2').value;
+      const r1 = document.getElementById('res-1');
+      const r2 = document.getElementById('res-2');
+
+      const map1 = {
+        rain: "➔ ...the festival <strong>will move</strong> inside the hall.",
+        clear: "➔ ...we <strong>will take</strong> hundreds of lantern photos."
+      };
+
+      const map2 = {
+        rich: "➔ ...I <strong>would fly</strong> first-class to Rio tomorrow.",
+        singer: "➔ ...I <strong>would sing</strong> on the main stage."
+      };
+
+      r1.innerHTML = map1[s1] || "Select an option above...";
+      r2.innerHTML = map2[s2] || "Select an option above...";
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      initScramble(5);
+      initScramble(6);
+    });
+  </script>
+</body>
+</html>
