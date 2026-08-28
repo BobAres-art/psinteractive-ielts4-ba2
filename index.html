@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intermediate English Studio</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent-cyan: #06b6d4;
+      --accent-violet: #8b5cf6;
+      --accent-amber: #f59e0b;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+      min-height: 100vh;
+      color: var(--text-main);
+      padding: 32px 16px 48px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+    }
+
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lesson-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text-main);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lesson-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      transition: background 0.2s ease;
+    }
+
+    .lesson-card:active {
+      transform: scale(0.98);
+      background: rgba(51, 65, 85, 0.8);
+    }
+
+    /* Accent themes per card */
+    .card-neither::before { background: var(--accent-violet); }
+    .card-conditionals::before { background: var(--accent-cyan); }
+    .card-modals::before { background: var(--accent-amber); }
+
+    .card-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .card-neither .icon-box { background: rgba(139, 92, 246, 0.15); }
+    .card-conditionals .icon-box { background: rgba(6, 182, 212, 0.15); }
+    .card-modals .icon-box { background: rgba(245, 158, 11, 0.15); }
+
+    .card-text h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: var(--text-main);
+    }
+
+    .card-text p {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    .arrow-icon {
+      color: var(--text-sub);
+      font-size: 1.2rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .lesson-card:hover .arrow-icon {
+      color: var(--text-main);
+      transform: translateX(3px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">Interactive Modules</div>
+      <h1>Grammar Practice Lab</h1>
+      <p>Targeted adult ESL exercises & conversational patterns</p>
+    </header>
+
+    <div class="menu-list">
+      <!-- 1. So / Neither -->
+      <a class="lesson-card card-neither" href="./neither-so/">
+        <div class="card-content">
+          <div class="icon-box">🤝</div>
+          <div class="card-text">
+            <h2>1. So & Neither</h2>
+            <p>Agreeing with positive & negative statements</p>
+          </div>
+        </div>
+        <div class="arrow-icon">→</div>
+      </a>
+
+      <!-- 2. Conditionals -->
+      <a class="lesson-card card-conditionals" href="./first-second-conditional/">
+        <div class="card-content">
+          <div class="icon-box">🔀</div>
+          <div class="card-text">
+            <h2>2. 1st & 2nd Conditionals</h2>
+            <p>Real possibilities vs. hypothetical situations</p>
+          </div>
+        </div>
+        <div class="arrow-icon">→</div>
+      </a>
+
+      <!-- 3. Must vs Have to -->
+      <a class="lesson-card card-modals" href="./must-haveto/">
+        <div class="card-content">
+          <div class="icon-box">📋</div>
+          <div class="card-text">
+            <h2>3. Must & Have To</h2>
+            <p>Rules, obligations & personal necessity</p>
+          </div>
+        </div>
+        <div class="arrow-icon">→</div>
+      </a>
+    </div>
+
+    <footer>Select any unit to load practice activities</footer>
+  </div>
+
+</body>
+</html>
